@@ -16,11 +16,9 @@
 //
 // Execute `rustlings hint box1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 #[derive(PartialEq, Debug)]
 pub enum List {
-    Cons(i32, List),
+    Cons(i32, Box<List>),
     Nil,
 }
 
@@ -33,11 +31,19 @@ fn main() {
 }
 
 pub fn create_empty_list() -> List {
-    todo!()
+    List::Nil
 }
 
 pub fn create_non_empty_list() -> List {
-    todo!()
+    let mut to_return: List = List::Nil;
+    for i in 0..10 {
+        to_return = List::Cons(i,Box::new(to_return));
+    }
+    to_return
+}
+
+pub fn push_front_list(my_list:List, to_insert:i32) -> List {
+    List::Cons(to_insert, Box::new(my_list))
 }
 
 #[cfg(test)]
@@ -52,5 +58,17 @@ mod tests {
     #[test]
     fn test_create_non_empty_list() {
         assert_ne!(create_empty_list(), create_non_empty_list())
+    }
+
+    #[test]
+    fn test_push_front_list(){
+        let mut to_test:List = create_empty_list();
+        to_test = push_front_list(to_test,5);
+        if let List::Cons(pushed,_) = to_test {
+            assert_eq!(5,pushed);
+        }else{
+            panic!("was not pushed");
+        }
+
     }
 }
